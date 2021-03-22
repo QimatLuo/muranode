@@ -39,8 +39,7 @@ const local = readdir(path.join(process.cwd(), "configs")).pipe(
 );
 
 const cloud = biz.pipe(
-  switchMap((biz) => biz.Config.listServices()),
-  pluck("items"),
+  switchMap((biz) => biz.config.listServices()),
   shareReplay(1)
 );
 
@@ -73,7 +72,7 @@ const doUpdate = local.pipe(
       mergeMap((x) =>
         biz.pipe(
           switchMap((biz) =>
-            biz.Config.setParameters({
+            biz.config.setParameters({
               service: x.script_key,
               parameters: require(path.join(
                 process.cwd(),
