@@ -50,6 +50,7 @@ const shouldAdd = zip(local, cloud).pipe(
 
 const exchangeList = bizWithBusiness.pipe(
   switchMap((biz) => biz.exchange.element()),
+  pluck('items'),
   shareReplay(1)
 );
 
