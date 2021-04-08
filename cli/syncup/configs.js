@@ -2,8 +2,9 @@ const fs = require("fs");
 const path = require("path");
 
 const { differenceBy } = require("lodash");
-const { bindNodeCallback, concat, from, zip } = require("rxjs");
+const { EMPTY, bindNodeCallback, concat, from, zip } = require("rxjs");
 const {
+  catchError,
   filter,
   map,
   mergeMap,
@@ -13,6 +14,7 @@ const {
   toArray,
 } = require("rxjs/operators");
 
+const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
 const { applicationId, businessId, host, token } = require("../index.js");
 
@@ -29,6 +31,14 @@ const bizWithBusiness = zip(applicationId, businessId, host, token).pipe(
 );
 
 const local = readdir(path.join(process.cwd(), "configs")).pipe(
+  catchError((e) => {
+    if (e.code === "ENOENT") {
+      L.log("Ignore syncup configs due to", e.message);
+      return EMPTY;
+    } else {
+      throw e;
+    }
+  }),
   switchMap((xs) => from(xs)),
   filter((x) => x.endsWith(".json")),
   map((x) => ({

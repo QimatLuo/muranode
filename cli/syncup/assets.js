@@ -4,8 +4,16 @@ const path = require("path");
 
 const FormData = require("form-data");
 const { differenceBy } = require("lodash");
-const { bindNodeCallback, concat, from, fromEvent, zip } = require("rxjs");
 const {
+  EMPTY,
+  bindNodeCallback,
+  concat,
+  from,
+  fromEvent,
+  zip,
+} = require("rxjs");
+const {
+  catchError,
   concatMap,
   map,
   mergeMap,
@@ -17,6 +25,7 @@ const {
   tap,
 } = require("rxjs/operators");
 
+const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
 const { applicationId, host, token } = require("../index.js");
 const { location_files } = require("../project/index.js");
@@ -90,6 +99,14 @@ function fileWithMd5(dir, x) {
 
 function listFiles(dir, folder = "") {
   return readdir(path.join(dir, folder)).pipe(
+    catchError((e) => {
+      if (e.code === "ENOENT") {
+        L.log("Ignore syncup assets due to", e.message);
+        return EMPTY;
+      } else {
+        throw e;
+      }
+    }),
     mergeMap((xs) =>
       from(xs).pipe(
         mergeMap((x) =>
