@@ -44,11 +44,14 @@ const local = readdir(path.join(process.cwd(), "endpoints")).pipe(
       throw e;
     }
   }),
-  switchMap((xs) => from(xs)),
-  filter((x) => x.endsWith(".lua")),
-  mergeMap((x) => readFile(path.join(process.cwd(), "endpoints", x))),
-  map((x) => parseScript(x)),
-  toArray(),
+  switchMap((xs) =>
+    from(xs).pipe(
+      filter((x) => x.endsWith(".lua")),
+      mergeMap((x) => readFile(path.join(process.cwd(), "endpoints", x))),
+      map((x) => parseScript(x)),
+      toArray()
+    )
+  ),
   shareReplay(1)
 );
 
@@ -57,10 +60,14 @@ const cloud = biz.pipe(
   shareReplay(1)
 );
 
-const shouldDelete = zip(cloud, local).pipe(
-  map(([cloud, local]) => differenceBy(cloud, local, (x) => x.path)),
-  mergeMap((xs) => from(xs)),
-  pluck("id")
+const shouldDelete = local.pipe(
+  switchMap((local) =>
+    cloud.pipe(
+      map((cloud) => differenceBy(cloud, local, (x) => x.path)),
+      mergeMap((xs) => from(xs)),
+      pluck("id")
+    )
+  )
 );
 
 const doDelete = biz.pipe(
@@ -69,30 +76,38 @@ const doDelete = biz.pipe(
   )
 );
 
-const shouldAdd = zip(local, cloud).pipe(
-  map(([local, cloud]) => differenceBy(local, cloud, (x) => x.path)),
-  mergeMap((xs) => from(xs))
+const shouldAdd = local.pipe(
+  switchMap((local) =>
+    cloud.pipe(
+      map((cloud) => differenceBy(local, cloud, (x) => x.path)),
+      mergeMap((xs) => from(xs))
+    )
+  )
 );
 
 const doAdd = biz.pipe(
   switchMap((biz) => shouldAdd.pipe(mergeMap((x) => biz.endpoint.add(x))))
 );
 
-const shouldUpdate = zip(local, cloud).pipe(
-  map(([local, cloud]) =>
-    local
-      .map((l) => {
-        const c = cloud.find((c) => c.path === l.path);
-        if (!c) return;
-        if (c.script === l.script) return;
-        return {
-          ...l,
-          id: c.id,
-        };
-      })
-      .filter(Boolean)
-  ),
-  mergeMap((xs) => from(xs))
+const shouldUpdate = local.pipe(
+  switchMap((local) =>
+    cloud.pipe(
+      map((cloud) =>
+        local
+          .map((l) => {
+            const c = cloud.find((c) => c.path === l.path);
+            if (!c) return;
+            if (c.script === l.script) return;
+            return {
+              ...l,
+              id: c.id,
+            };
+          })
+          .filter(Boolean)
+      ),
+      mergeMap((xs) => from(xs))
+    )
+  )
 );
 
 const doUpdate = biz.pipe(

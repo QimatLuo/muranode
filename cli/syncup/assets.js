@@ -48,10 +48,14 @@ const cloud = biz.pipe(
   shareReplay(1)
 );
 
-const shouldDelete = zip(cloud, local).pipe(
-  map(([cloud, local]) => differenceBy(cloud, local, (x) => x.path)),
-  mergeMap((xs) => from(xs)),
-  pluck("path")
+const shouldDelete = local.pipe(
+  switchMap((local) =>
+    cloud.pipe(
+      map((cloud) => differenceBy(cloud, local, (x) => x.path)),
+      mergeMap((xs) => from(xs)),
+      pluck("path")
+    )
+  )
 );
 
 const doDelete = biz.pipe(
@@ -60,10 +64,14 @@ const doDelete = biz.pipe(
   )
 );
 
-const shouldUpload = zip(local, cloud).pipe(
-  map(([local, cloud]) => differenceBy(local, cloud, (x) => x.md5)),
-  mergeMap((xs) => from(xs)),
-  pluck("path")
+const shouldUpload = local.pipe(
+  switchMap((local) =>
+    cloud.pipe(
+      map((cloud) => differenceBy(local, cloud, (x) => x.md5)),
+      mergeMap((xs) => from(xs)),
+      pluck("path")
+    )
+  )
 );
 
 const doUpdate = zip(biz, location_files).pipe(
@@ -117,10 +125,10 @@ function listFiles(dir, folder = "") {
                 : fileWithMd5(dir, path.join(folder, x))
             )
           )
-        )
+        ),
+        reduce((a, b) => a.concat(b), [])
       )
-    ),
-    reduce((a, b) => a.concat(b), [])
+    )
   );
 }
 

@@ -39,12 +39,15 @@ const local = readdir(path.join(process.cwd(), "configs")).pipe(
       throw e;
     }
   }),
-  switchMap((xs) => from(xs)),
-  filter((x) => x.endsWith(".json")),
-  map((x) => ({
-    script_key: path.basename(x, ".json"),
-  })),
-  toArray(),
+  switchMap((xs) =>
+    from(xs).pipe(
+      filter((x) => x.endsWith(".json")),
+      map((x) => ({
+        script_key: path.basename(x, ".json"),
+      })),
+      toArray()
+    )
+  ),
   shareReplay(1)
 );
 
@@ -53,9 +56,13 @@ const cloud = biz.pipe(
   shareReplay(1)
 );
 
-const shouldAdd = zip(local, cloud).pipe(
-  map(([local, cloud]) => differenceBy(local, cloud, (x) => x.script_key)),
-  mergeMap((xs) => from(xs))
+const shouldAdd = local.pipe(
+  switchMap((local) =>
+    cloud.pipe(
+      map((cloud) => differenceBy(local, cloud, (x) => x.script_key)),
+      mergeMap((xs) => from(xs))
+    )
+  )
 );
 
 const exchangeList = bizWithBusiness.pipe(
