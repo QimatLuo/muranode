@@ -2,8 +2,9 @@ const fs = require("fs");
 const path = require("path");
 
 const yaml = require("js-yaml");
-const { bindNodeCallback, from, zip } = require("rxjs");
+const { EMPTY, bindNodeCallback, from, zip } = require("rxjs");
 const {
+  catchError,
   filter,
   map,
   mergeMap,
@@ -12,6 +13,7 @@ const {
   shareReplay,
 } = require("rxjs/operators");
 
+const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
 const { host, productId, token } = require("../index.js");
 
@@ -23,6 +25,14 @@ const biz = zip(host, productId, token).pipe(
 );
 
 const local = readdir(path.join(process.cwd(), "specs")).pipe(
+  catchError((e) => {
+    if (e.code === "ENOENT") {
+      L.log("Ignore syncup resources due to", e.message);
+      return EMPTY;
+    } else {
+      throw e;
+    }
+  }),
   mergeMap((xs) => from(xs)),
   filter((x) => x.endsWith(".yaml")),
   shareReplay(1)

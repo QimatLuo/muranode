@@ -216,11 +216,14 @@ const Biz = (init = {}) => {
               solutionId: service === "device2" ? _.productId : _.applicationId,
             },
             {
-              get: (__, method) => (body) =>
-                _.api({
-                  body,
-                  url: `${prefix}solution/${__.solutionId}/serviceconfig/${service}/call/${method}`,
-                }),
+              get: (__, method) => (body) => {
+                let url = `${prefix}solution/${__.solutionId}/serviceconfig/${service}/call/${method}`;
+                if (service === "user" && method === "createUserData") {
+                  url = `${prefix}solution/${__.solutionId}/user/${body.id}/storage`;
+                  delete body.id;
+                }
+                return _.api({ body, url });
+              },
             }
           );
       }

@@ -2,8 +2,9 @@ const fs = require("fs");
 const path = require("path");
 
 const { differenceBy } = require("lodash");
-const { bindNodeCallback, from, merge, zip } = require("rxjs");
+const { EMPTY, bindNodeCallback, from, merge, zip } = require("rxjs");
 const {
+  catchError,
   concatMap,
   filter,
   map,
@@ -14,6 +15,7 @@ const {
   toArray,
 } = require("rxjs/operators");
 
+const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
 const { applicationId, host, token } = require("../index.js");
 
@@ -26,6 +28,14 @@ const biz = zip(applicationId, host, token).pipe(
 );
 
 const local = readdir(path.join(process.cwd(), "modules")).pipe(
+  catchError((e) => {
+    if (e.code === "ENOENT") {
+      L.log("Ignore syncup modules due to", e.message);
+      return EMPTY;
+    } else {
+      throw e;
+    }
+  }),
   switchMap((xs) => from(xs)),
   filter((x) => x.endsWith(".lua")),
   mergeMap((x) =>
