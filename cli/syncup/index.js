@@ -35,7 +35,10 @@ function commander(program) {
         .pipe(concatMap((x) => require(`./${x}.js`).action))
         .subscribe(
           (x) => L.stdout(JSON.stringify(x)),
-          L.stderr,
+          (x) => {
+            L.stderr(x);
+            process.exit(1);
+          },
           () => L.log("command syncup complete")
         );
     });
