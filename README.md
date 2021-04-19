@@ -24,9 +24,9 @@ const {
 } = require("muranode");
 
 const host = process.env.muranode_net_host;
-const email = process.env.muranode_user_name
-const password = process.env.muranode_password
-const applicationId = process.env.muranode_application_id
+const email = process.env.muranode_user_name;
+const password = process.env.muranode_password;
+const applicationId = process.env.muranode_application_id;
 const productId = process.env.muranode_product_id;
 
 const biz = Biz({ host, applicationId, productId });
@@ -54,9 +54,9 @@ const {
 } = require("muranode");
 
 const host = process.env.muranode_net_host;
-const email = process.env.muranode_user_name
-const password = process.env.muranode_password
-const applicationId = process.env.muranode_application_id
+const email = process.env.muranode_user_name;
+const password = process.env.muranode_password;
+const applicationId = process.env.muranode_application_id;
 const productId = process.env.muranode_product_id;
 
 const biz = Biz({ host, applicationId, productId });
