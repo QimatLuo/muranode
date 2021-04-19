@@ -1,9 +1,9 @@
+global.AbortController = require("abort-controller");
+global.fetch = require("node-fetch");
 const { get, merge } = require("lodash");
-const { defer } = require("rxjs");
-const { ajax } = require("rxjs/ajax");
-const { pluck, tap } = require("rxjs/operators");
-const { XMLHttpRequest } = require("xmlhttprequest");
-const fetch = require("node-fetch");
+const { fromFetch } = require("rxjs/fetch");
+const { defer, from } = require("rxjs");
+const { map, switchMap, tap } = require("rxjs/operators");
 
 const L = require("../cli/log.js");
 
@@ -15,7 +15,6 @@ const Biz = (init = {}) => {
       const method = x.body ? "POST" : "GET";
       const headers = {
         Authorization: `token ${target.token}`,
-        "Content-Type": "application/json",
         "User-Agent": "Muranode/1.0.0",
       };
       if (x.url.endsWith("/api:1/token/")) {
@@ -24,36 +23,40 @@ const Biz = (init = {}) => {
 
       const options = merge(
         {
-          createXHR: () => new XMLHttpRequest(),
           headers,
           method,
         },
         x
       );
-
       if (
-        get(options, "headers.content-type", "").includes("multipart/form-data")
+        !get(options, "headers.content-type", "").includes(
+          "multipart/form-data"
+        )
       ) {
-        const options = merge(
-          {
-            headers: {
-              authorization: `token ${target.token}`,
-            },
-          },
-          x
-        );
-
-        L.log(options);
-        return fetch(x.url, options);
-      } else {
-        L.log(options);
-        return ajax(options).pipe(
-          tap((x) => L.log(x.status)),
-          pluck("response"),
-          tap((x) => L.log(JSON.stringify(x))),
-          tap(() => L.log())
-        );
+        options.headers["content-type"] = "application/json";
+        options.body = JSON.stringify(options.body);
       }
+
+      L.log(options);
+      return fromFetch(x.url, options).pipe(
+        tap((x) => L.log(x.status)),
+        switchMap((x) => x.text()),
+        tap((x) => L.log(x)),
+        map((x) => {
+          try {
+            return JSON.parse(x);
+          } catch (e) {
+            return x;
+          }
+        }),
+        map((x) => {
+          if (x.statusCode >= 400) {
+            throw x;
+          } else {
+            return x;
+          }
+        })
+      );
     });
 
   const handler = {

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/QimatLuo/muranode#readme",
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "commander": "^7.0.0",
     "form-data": "^3.0.0",
     "ini": "^2.0.0",
