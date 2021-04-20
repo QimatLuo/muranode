@@ -8,7 +8,15 @@ module.exports = {
       lastTime = time;
       console.log(time);
     }
-    console.log(...args);
+    console.log(
+      ...args.map((x) => {
+        if ((x.url || "").endsWith("/api:1/token/")) {
+          x = { ...x };
+          x.body = x.body.replace(/"password":".*"/, '"password":"**********"');
+        }
+        return x;
+      })
+    );
   },
   stderr: console.error,
   stdout: console.log,
