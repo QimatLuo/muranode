@@ -63,7 +63,7 @@ const cloud = biz.pipe(
 const shouldDelete = local.pipe(
   switchMap((local) =>
     cloud.pipe(
-      map((cloud) => differenceBy(cloud, local, (x) => x.path)),
+      map((cloud) => differenceBy(cloud, local, (x) => toUniqueEndpoint(x))),
       mergeMap((xs) => from(xs)),
       pluck("id")
     )
@@ -79,7 +79,7 @@ const doDelete = biz.pipe(
 const shouldAdd = local.pipe(
   switchMap((local) =>
     cloud.pipe(
-      map((cloud) => differenceBy(local, cloud, (x) => x.path)),
+      map((cloud) => differenceBy(local, cloud, (x) => toUniqueEndpoint(x))),
       mergeMap((xs) => from(xs))
     )
   )
@@ -95,7 +95,9 @@ const shouldUpdate = local.pipe(
       map((cloud) =>
         local
           .map((l) => {
-            const c = cloud.find((c) => c.path === l.path);
+            const c = cloud.find(
+              (c) => toUniqueEndpoint(c) === toUniqueEndpoint(l)
+            );
             if (!c) return;
             if (c.script === l.script) return;
             return {
@@ -130,6 +132,10 @@ function parseScript(x) {
     });
   o.script = scripts.join(os.EOL);
   return o;
+}
+
+function toUniqueEndpoint(x) {
+  return x.method.toLowerCase() + x.path;
 }
 
 module.exports = {
