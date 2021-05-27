@@ -42,10 +42,10 @@ const payload = local.pipe(
   mergeMap((x) =>
     readFile(path.join(process.cwd(), "specs", x)).pipe(
       map((x) => yaml.load(x)),
-      map((o) => ({ [path.basename(x, ".yaml")]: o })),
-      reduce((a, b) => Object.assign(a, b), {})
+      map((o) => ({ [path.basename(x, ".yaml")]: o }))
     )
-  )
+  ),
+  reduce((a, b) => Object.assign(a, b), {})
 );
 
 const doUpdate = payload.pipe(
