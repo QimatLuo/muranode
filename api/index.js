@@ -82,6 +82,11 @@ const Biz = (init = {}) => {
             _.api({
               url: `${prefix}user/${x.email}/membership/`,
             });
+        case "solution":
+          return (x) =>
+            _.api({
+              url: `${prefix}solution/${x.id}`,
+            });
         case "solutions":
           return (x) =>
             _.api({
