@@ -232,7 +232,15 @@ const Biz = (init = {}) => {
                   url = `${prefix}solution/${__.solutionId}/user/${body.id}/storage`;
                   delete body.id;
                 }
-                return _.api({ body, url });
+                return _.api({ body, url }).pipe(
+                  map((x) => {
+                    if (method === "countIdentities" && x === "") {
+                      return 0;
+                    } else {
+                      return x;
+                    }
+                  })
+                );
               },
             }
           );
