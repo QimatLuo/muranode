@@ -67,7 +67,7 @@ const doDelete = biz.pipe(
 const shouldUpload = local.pipe(
   switchMap((local) =>
     cloud.pipe(
-      map((cloud) => differenceBy(local, cloud, (x) => x.md5)),
+      map((cloud) => differenceBy(local, cloud, (x) => `${x.md5}${x.path}`)),
       mergeMap((xs) => from(xs)),
       pluck("path")
     )
