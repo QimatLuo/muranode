@@ -226,9 +226,7 @@ const Biz = (init = {}) => {
             },
             {
               get: (__, method) => (body) => {
-                let url = `${prefix}solution/${
-                  __.solutionId
-                }/serviceconfig/${service}/call/${method}`;
+                let url = `${prefix}solution/${__.solutionId}/serviceconfig/${service}/call/${method}`;
                 if (service === "user" && method === "createUserData") {
                   url = `${prefix}solution/${__.solutionId}/user/${body.id}/storage`;
                   delete body.id;
