@@ -11,6 +11,7 @@ function commander(program) {
     .option("-L, --logs", "Print out a request payload for each network call")
     .action(async (service, method, parameters = "{}", options) => {
       global.logs = options.logs;
+      service = service.toLowerCase();
       const solutinoId = service === "device2" ? productId : applicationId;
 
       try {

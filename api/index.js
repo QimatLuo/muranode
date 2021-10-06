@@ -62,6 +62,7 @@ const Biz = (init = {}) => {
   const handler = {
     get: (_, service) => {
       const prefix = `https://${_.host}/api:1/`;
+      service = service.toLowerCase();
 
       switch (service) {
         case "_":
@@ -225,12 +226,14 @@ const Biz = (init = {}) => {
             },
             {
               get: (__, method) => (body) => {
-                let url = `${prefix}solution/${
-                  __.solutionId
-                }/serviceconfig/${service.toLowerCase()}/call/${method}`;
+                let url = `${prefix}solution/${__.solutionId}/serviceconfig/${service}/call/${method}`;
                 if (service === "user" && method === "createUserData") {
                   url = `${prefix}solution/${__.solutionId}/user/${body.id}/storage`;
                   delete body.id;
+                }
+                if (service === "device2" && method === "querySignals") {
+                  url = `${prefix}service/${__.solutionId}/device2/identity/${body.identity}/signals/query`;
+                  delete body.identity;
                 }
                 return _.api({ body, url }).pipe(
                   map((x) => {
