@@ -138,7 +138,7 @@ const Biz = (init = {}) => {
                 url: `${prefix}solution/${_.applicationId}/module/${_.applicationId}_${x.name}`,
               }),
           };
-        case "fileUpload":
+        case "fileupload":
           return (x) =>
             _.api({
               body: x.formData,
