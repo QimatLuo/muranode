@@ -231,8 +231,8 @@ const Biz = (init = {}) => {
                   url = `${prefix}solution/${__.solutionId}/user/${body.id}/storage`;
                   delete body.id;
                 }
-                if (service === "device2" && method === "querySignals") {
-                  url = `${prefix}service/${__.solutionId}/device2/identity/${body.identity}/signals/query`;
+                if (method === "querySignals") {
+                  url = `${prefix}service/${_.productId}/device2/identity/${body.identity}/signals/query`;
                   delete body.identity;
                 }
                 return _.api({ body, url }).pipe(
