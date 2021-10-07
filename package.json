@@ -1,6 +1,6 @@
 {
   "name": "muranode",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "",
   "bin": "./cli/bin.js",
   "main": "index.js",
