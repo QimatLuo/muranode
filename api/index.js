@@ -93,7 +93,7 @@ const Biz = (init = {}) => {
             _.api({
               url: `${prefix}business/${x.businessId}/solution/`,
             });
-        case "serviceConfig":
+        case "serviceconfig":
           return {
             list: (x) =>
               _.api({
@@ -182,7 +182,7 @@ const Biz = (init = {}) => {
                 url: `${prefix}solution/${_.applicationId}/endpoint/${x.id}`,
               }),
           };
-        case "eventHandler":
+        case "eventhandler":
           return {
             list: () =>
               _.api({
