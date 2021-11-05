@@ -142,7 +142,10 @@ const Biz = (init = {}) => {
           return (x) =>
             _.api({
               body: x.formData,
-              headers: x.formData.getHeaders(),
+              headers: {
+                'x-audit-reason': 'muranode cli upload assets',
+                ...x.formData.getHeaders(),
+              },
               method: "PUT",
               url: `${prefix}solution/${
                 _.applicationId
