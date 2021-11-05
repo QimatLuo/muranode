@@ -19,8 +19,8 @@ function commander(program) {
       global.logs = args.logs;
 
       const actions = [
-        "assets",
         "configs",
+        "assets",
         "endpoints",
         "modules",
         "resources",
