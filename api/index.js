@@ -85,10 +85,12 @@ const Biz = (init = {}) => {
               url: `${prefix}user/${x.email}/membership/`,
             });
         case "solution":
-          return (x) =>
+          return {
+            get: (x) =>
             _.api({
               url: `${prefix}solution/${x.id}`,
-            });
+            })
+          }
         case "solutions":
           return (x) =>
             _.api({
