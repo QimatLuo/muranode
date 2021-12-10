@@ -2,11 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const { EMPTY, bindNodeCallback, zip } = require("rxjs");
-const {
-  catchError,
-  map,
-  switchMap,
-} = require("rxjs/operators");
+const { catchError, map, switchMap } = require("rxjs/operators");
 
 const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
@@ -27,14 +23,12 @@ const payload = readFile(path.join(process.cwd(), "env.json")).pipe(
       throw e;
     }
   }),
-  map(x => x.toString().trim()),
-  map(x => JSON.parse(x)),
+  map((x) => x.toString().trim()),
+  map((x) => JSON.parse(x))
 );
 
 const doUpdate = payload.pipe(
-  switchMap((x) =>
-    biz.pipe(switchMap((biz) => biz.solution.env(x)))
-  )
+  switchMap((x) => biz.pipe(switchMap((biz) => biz.solution.env(x))))
 );
 
 module.exports = {

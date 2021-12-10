@@ -87,16 +87,16 @@ const Biz = (init = {}) => {
         case "solution":
           return {
             get: (x) =>
-            _.api({
-              url: `${prefix}solution/${x.id}`,
-            }),
+              _.api({
+                url: `${prefix}solution/${x.id}`,
+              }),
             env: (body) =>
               _.api({
                 body,
                 method: "PUT",
                 url: `${prefix}solution/${_.applicationId}/env`,
               }),
-          }
+          };
         case "solutions":
           return (x) =>
             _.api({
