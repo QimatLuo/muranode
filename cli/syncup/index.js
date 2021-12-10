@@ -12,6 +12,7 @@ function commander(program) {
     .option("-C, --configs", "Only syncup configs")
     .option("-E, --endpoints", "Only syncup endpoints")
     .option("-M, --modules", "Only syncup modules")
+    .option("-N, --env", "Only syncup environment variables")
     .option("-R, --resources", "Only syncup resources")
     .option("-S, --services", "Only syncup services")
     .option("-L, --logs", "Print out a request payload for each network call")
@@ -19,6 +20,7 @@ function commander(program) {
       global.logs = args.logs;
 
       const actions = [
+        "env",
         "configs",
         "assets",
         "endpoints",
