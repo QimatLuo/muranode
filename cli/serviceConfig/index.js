@@ -22,7 +22,7 @@ function commander(program) {
         params =
           method === "add" && !payload.service
             ? zip(biz, productId).pipe(
-                switchMap(([biz, id]) => biz.solution({ id })),
+                switchMap(([biz, id]) => biz.solution.get({ id })),
                 map((x) => ({
                   ...payload,
                   service: x.id,
