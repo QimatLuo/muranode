@@ -16,6 +16,7 @@ const Biz = (init = {}) => {
       const headers = {
         Authorization: `token ${target.token}`,
         "User-Agent": "Muranode/1.0.0",
+        "x-audit-reason:: "muranode cli",
       };
       if (x.url.endsWith("/api:1/token/")) {
         delete headers["Authorization"];
@@ -143,7 +144,6 @@ const Biz = (init = {}) => {
             _.api({
               body: x.formData,
               headers: {
-                'x-audit-reason': 'muranode cli upload assets',
                 ...x.formData.getHeaders(),
               },
               method: "PUT",
