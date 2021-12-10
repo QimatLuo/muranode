@@ -230,6 +230,7 @@ const Biz = (init = {}) => {
             {
               get: (__, method) => (body) => {
                 let url = `${prefix}solution/${__.solutionId}/serviceconfig/${service}/call/${method}`;
+                let httpMethod = "POST";
                 if (service === "user" && method === "createUserData") {
                   url = `${prefix}solution/${__.solutionId}/user/${body.id}/storage`;
                   delete body.id;
@@ -238,7 +239,12 @@ const Biz = (init = {}) => {
                   url = `${prefix}service/${_.productId}/device2/identity/${body.identity}/signals/query`;
                   delete body.identity;
                 }
-                return _.api({ body, url }).pipe(
+                if (method === "queryResource") {
+                  url = `${prefix}service/${_.productId}/device2/resource/${body.resource}/identities/query?identities=body.identity`;
+                  body = undefined
+                  httpMethod = "GET"
+                }
+                return _.api({ body, url, method: httpMethod }).pipe(
                   map((x) => {
                     if (method === "countIdentities" && x === "") {
                       return 0;
