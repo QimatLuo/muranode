@@ -16,7 +16,7 @@ const Biz = (init = {}) => {
       const headers = {
         Authorization: `token ${target.token}`,
         "User-Agent": "Muranode/1.0.0",
-        "x-audit-reason:: "muranode cli",
+        "x-audit-reason": "muranode cli",
       };
       if (x.url.endsWith("/api:1/token/")) {
         delete headers["Authorization"];
