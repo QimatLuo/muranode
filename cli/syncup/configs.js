@@ -2,7 +2,16 @@ const fs = require("fs");
 const path = require("path");
 
 const { differenceBy } = require("lodash");
-const { EMPTY, bindNodeCallback, concat, from, iif, of, throwError, zip } = require("rxjs");
+const {
+  EMPTY,
+  bindNodeCallback,
+  concat,
+  from,
+  iif,
+  of,
+  throwError,
+  zip,
+} = require("rxjs");
 const {
   catchError,
   filter,
@@ -75,11 +84,13 @@ const doAdd = shouldAdd.pipe(
   mergeMap(({ script_key }) =>
     exchangeList.pipe(
       map((xs) => xs.find((x) => x.source.name === script_key)),
-      switchMap(x => iif(
-        () => !!x,
-        of(x),
-        throwError(`Error: Exchange element "${script_key}" not found.`),
-      )),
+      switchMap((x) =>
+        iif(
+          () => !!x,
+          of(x),
+          throwError(`Error: Exchange element "${script_key}" not found.`)
+        )
+      ),
       switchMap(({ elementId }) =>
         bizWithBusiness.pipe(
           switchMap((biz) => biz.exchange.purchase({ elementId }))

@@ -241,8 +241,8 @@ const Biz = (init = {}) => {
                 }
                 if (method === "queryResource") {
                   url = `${prefix}service/${_.productId}/device2/resource/${body.resource}/identities/query?identities=body.identity`;
-                  body = undefined
-                  httpMethod = "GET"
+                  body = undefined;
+                  httpMethod = "GET";
                 }
                 return _.api({ body, url, method: httpMethod }).pipe(
                   map((x) => {
