@@ -1,4 +1,4 @@
-const { zip } = require("rxjs");
+const { of, zip } = require("rxjs");
 const { map, shareReplay, switchMap } = require("rxjs/operators");
 
 const L = require("../log.js");
