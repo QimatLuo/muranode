@@ -199,14 +199,16 @@ const Biz = (init = {}) => {
               _.api({
                 url: `${prefix}solution/${_.applicationId}/eventhandler`,
               }),
-            update: (x) =>
-              _.api({
+            update: (x) => {
+              const id = x.id || _.applicationId;
+              return _.api({
                 body: {
                   script: x.script,
                 },
                 method: "PUT",
-                url: `${prefix}solution/${_.applicationId}/eventhandler/${_.applicationId}_${x.name}`,
-              }),
+                url: `${prefix}solution/${id}/eventhandler/${id}_${x.name}`,
+              });
+            },
           };
         case "exchange":
           return {
