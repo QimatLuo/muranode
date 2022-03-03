@@ -202,8 +202,6 @@ const Biz = (init = {}) => {
             update: (x) =>
               _.api({
                 body: {
-                  alias: `${_.applicationId}_${x.name}`,
-                  solution_id: _.applicationId,
                   script: x.script,
                 },
                 method: "PUT",
