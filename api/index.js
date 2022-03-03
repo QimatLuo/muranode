@@ -248,7 +248,9 @@ const Biz = (init = {}) => {
                   delete body.identity;
                 }
                 if (method === "queryResource") {
-                  url = `${prefix}service/${_.productId}/device2/resource/${body.resource}/identities/query?identities=${body.identities.join(',')}`;
+                  url = `${prefix}service/${_.productId}/device2/resource/${
+                    body.resource
+                  }/identities/query?identities=${body.identities.join(",")}`;
                   body = undefined;
                   httpMethod = "GET";
                 }
