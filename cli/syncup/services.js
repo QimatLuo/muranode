@@ -71,11 +71,11 @@ function parseScript(x) {
     .split(os.EOL)
     .forEach((x) => {
       const event = x.match(/^--#EVENT (.+)/);
-      const id = x.match(/^--#ID (.+)/);
+      const product = x.match(/^--#PRODUCT/);
       if (event) {
         o.name = event[1].trim().replace(/ /g, "_");
-      } else if (id) {
-        o.id = id[1].trim();
+      } else if (product) {
+        o.product = true;
       } else {
         scripts.push(x);
       }
