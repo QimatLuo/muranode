@@ -200,7 +200,7 @@ const Biz = (init = {}) => {
                 url: `${prefix}solution/${_.applicationId}/eventhandler`,
               }),
             update: (x) => {
-              const id = x.id || _.applicationId;
+              const id = x.product ? _.productId : _.applicationId;
               return _.api({
                 body: {
                   script: x.script,
