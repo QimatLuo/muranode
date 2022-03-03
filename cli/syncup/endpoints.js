@@ -122,10 +122,10 @@ function parseScript(x) {
   x.toString()
     .split(os.EOL)
     .forEach((x) => {
-      const match = x.match(/--#ENDPOINT ([A-Z]+) (.+)/);
-      if (match) {
-        o.method = match[1];
-        o.path = match[2];
+      const endpoint = x.match(/^--#ENDPOINT ([A-Z]+) (.+)/);
+      if (endpoint) {
+        o.method = endpoint[1].trim();
+        o.path = endpoint[2].trim();
       } else {
         scripts.push(x);
       }

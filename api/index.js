@@ -199,16 +199,16 @@ const Biz = (init = {}) => {
               _.api({
                 url: `${prefix}solution/${_.applicationId}/eventhandler`,
               }),
-            update: (x) =>
-              _.api({
+            update: (x) => {
+              const id = x.id || _.applicationId;
+              return _.api({
                 body: {
-                  alias: `${_.applicationId}_${x.name}`,
-                  solution_id: _.applicationId,
                   script: x.script,
                 },
                 method: "PUT",
-                url: `${prefix}solution/${_.applicationId}/eventhandler/${_.applicationId}_${x.name}`,
-              }),
+                url: `${prefix}solution/${id}/eventhandler/${id}_${x.name}`,
+              });
+            },
           };
         case "exchange":
           return {
@@ -248,7 +248,9 @@ const Biz = (init = {}) => {
                   delete body.identity;
                 }
                 if (method === "queryResource") {
-                  url = `${prefix}service/${_.productId}/device2/resource/${body.resource}/identities/query?identities=${body.identities.join(',')}`;
+                  url = `${prefix}service/${_.productId}/device2/resource/${
+                    body.resource
+                  }/identities/query?identities=${body.identities.join(",")}`;
                   body = undefined;
                   httpMethod = "GET";
                 }

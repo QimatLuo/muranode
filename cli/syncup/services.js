@@ -70,9 +70,12 @@ function parseScript(x) {
   x.toString()
     .split(os.EOL)
     .forEach((x) => {
-      const match = x.match(/--#EVENT (.+)/);
-      if (match) {
-        o.name = match[1].replace(/ /g, "_");
+      const event = x.match(/^--#EVENT (.+)/);
+      const id = x.match(/^--#ID (.+)/);
+      if (event) {
+        o.name = event[1].trim().replace(/ /g, "_");
+      } else if (id) {
+        o.id = id[1].trim();
       } else {
         scripts.push(x);
       }
