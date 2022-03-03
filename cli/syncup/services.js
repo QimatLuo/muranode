@@ -24,13 +24,15 @@ const {
 
 const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
-const { applicationId, host, token } = require("../index.js");
+const { applicationId, host, productId, token } = require("../index.js");
 
 const readFile = bindNodeCallback(fs.readFile);
 const readdir = bindNodeCallback(fs.readdir);
 
-const biz = zip(applicationId, host, token).pipe(
-  map(([applicationId, host, token]) => Biz({ applicationId, host, token })),
+const biz = zip(applicationId, host, productId, token).pipe(
+  map(([applicationId, host, productId, token]) =>
+    Biz({ applicationId, host, productId, token })
+  ),
   shareReplay(1)
 );
 
