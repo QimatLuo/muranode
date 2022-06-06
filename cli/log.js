@@ -9,12 +9,12 @@ module.exports = {
       console.log(time);
     }
     const xs = args.map((x) => {
-        if ((x.url || "").endsWith("/api:1/token/")) {
-          x = { ...x };
-          x.body = x.body.replace(/"password":".*"/, '"password":"**********"');
-        }
-        return x;
-      })
+      if ((x.url || "").endsWith("/api:1/token/")) {
+        x = { ...x };
+        x.body = x.body.replace(/"password":".*"/, '"password":"**********"');
+      }
+      return x;
+    });
     stringifyLog(console.log)(...xs);
   },
   stderr: stringifyLog(console.error),
