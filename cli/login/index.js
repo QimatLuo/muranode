@@ -9,7 +9,7 @@ function commander(program) {
       global.logs = args.logs;
 
       login.subscribe(
-        (x) => L.stdout(JSON.stringify(x)),
+        (x) => L.stdout(x),
         L.stderr,
         () => L.log("command login complete")
       );

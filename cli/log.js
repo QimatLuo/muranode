@@ -8,16 +8,22 @@ module.exports = {
       lastTime = time;
       console.log(time);
     }
-    console.log(
-      ...args.map((x) => {
-        if ((x.url || "").endsWith("/api:1/token/")) {
-          x = { ...x };
-          x.body = x.body.replace(/"password":".*"/, '"password":"**********"');
-        }
-        return x;
-      })
-    );
+    const xs = args.map((x) => {
+      if ((x.url || "").endsWith("/api:1/token/")) {
+        x = { ...x };
+        x.body = x.body.replace(/"password":".*"/, '"password":"**********"');
+      }
+      return x;
+    });
+    stringifyLog(console.log)(...xs);
   },
-  stderr: console.error,
-  stdout: console.log,
+  stderr: stringifyLog(console.error),
+  stdout: stringifyLog(console.log),
 };
+
+function stringifyLog(f) {
+  return (...args) => {
+    const xs = args.map((x) => JSON.stringify(x));
+    return f(...xs);
+  };
+}

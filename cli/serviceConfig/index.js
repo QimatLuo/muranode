@@ -40,7 +40,7 @@ function commander(program) {
           )
         )
         .subscribe(
-          (x) => L.stdout(JSON.stringify(x)),
+          (x) => L.stdout(x),
           L.stderr,
           () => L.log("command serviceConfig complete")
         );

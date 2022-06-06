@@ -27,7 +27,7 @@ function commander(program) {
             switchMap((biz) => biz[service][method](json))
           )
           .subscribe(
-            (x) => L.stdout(JSON.stringify(x)),
+            (x) => L.stdout(x),
             L.stderr,
             () => L.log("command service complete")
           );
