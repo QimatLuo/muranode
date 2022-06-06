@@ -36,7 +36,7 @@ function commander(program) {
       )
         .pipe(concatMap((x) => require(`./${x}.js`).action))
         .subscribe(
-          (x) => L.stdout(JSON.stringify(x)),
+          (x) => L.stdout(x),
           (x) => {
             L.stderr(x);
             process.exit(1);
