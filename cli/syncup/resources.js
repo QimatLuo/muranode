@@ -15,13 +15,15 @@ const {
 
 const L = require("../log.js");
 const { Biz } = require("../../api/index.js");
-const { host, productId, token } = require("../index.js");
+const { applicationId, host, productId, token } = require("../index.js");
 
 const readFile = bindNodeCallback(fs.readFile);
 const readdir = bindNodeCallback(fs.readdir);
 
-const biz = zip(host, productId, token).pipe(
-  map(([host, productId, token]) => Biz({ host, productId, token }))
+const biz = zip(applicationId, host, productId, token).pipe(
+  map(([applicationId, host, productId, token]) =>
+    Biz({ applicationId, host, productId, token })
+  )
 );
 
 const local = readdir(path.join(process.cwd(), "specs")).pipe(
@@ -48,9 +50,16 @@ const payload = local.pipe(
   reduce((a, b) => Object.assign(a, b), {})
 );
 
-const doUpdate = payload.pipe(
-  switchMap((x) =>
-    biz.pipe(switchMap((biz) => biz.device2.updateGatewaySettings(x)))
+const doUpdate = zip(payload, productId).pipe(
+  switchMap(([parameters, service]) =>
+    biz.pipe(
+      switchMap((biz) =>
+        biz.config.setParameters({
+          service,
+          parameters,
+        })
+      )
+    )
   )
 );
 
