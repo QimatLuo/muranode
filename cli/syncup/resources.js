@@ -52,7 +52,7 @@ const payload = local.pipe(
 );
 
 const doUpdate = zip(payload, productId).pipe(
-  switchMap(([parameters, service]) =>
+  switchMap(([{ resources, ...parameters }, service]) =>
     biz.pipe(
       switchMap((biz) =>
         biz.config.setParameters({
