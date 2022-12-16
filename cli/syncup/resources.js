@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const yaml = require("js-yaml");
-const { EMPTY, bindNodeCallback, from, merge, zip } = require("rxjs");
+const { EMPTY, bindNodeCallback, concat, from, merge, zip } = require("rxjs");
 const {
   catchError,
   filter,
@@ -86,7 +86,7 @@ function isSubset(a, b) {
   }
 }
 
-const syncResources = merge(
+const syncResources = concat(
   diff("addGatewayResource", ([a, b]) => Object.keys(a).filter((k) => !b[k])),
   diff("removeGatewayResource", ([a, b]) =>
     Object.keys(b).filter((k) => !a[k])
