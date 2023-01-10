@@ -2,12 +2,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-const {
-  EMPTY,
-  bindNodeCallback,
-  from,
-  zip,
-} = require("rxjs");
+const { EMPTY, bindNodeCallback, from, zip } = require("rxjs");
 const {
   catchError,
   filter,

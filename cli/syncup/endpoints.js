@@ -3,13 +3,7 @@ const os = require("os");
 const path = require("path");
 
 const { differenceBy } = require("lodash");
-const {
-  EMPTY,
-  bindNodeCallback,
-  from,
-  merge,
-  zip,
-} = require("rxjs");
+const { EMPTY, bindNodeCallback, from, merge, zip } = require("rxjs");
 const {
   catchError,
   filter,
