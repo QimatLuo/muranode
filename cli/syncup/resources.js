@@ -48,7 +48,7 @@ const payload = local.pipe(
       map((o) => ({ [path.basename(x, ".yaml")]: o }))
     )
   ),
-  reduce((a, b) => Object.assign(a, b), {})
+  reduce((a, b) => Object.assign(a, b))
 );
 
 const doUpdate = zip(payload, productId).pipe(

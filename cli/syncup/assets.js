@@ -22,7 +22,6 @@ const {
   reduce,
   shareReplay,
   takeUntil,
-  tap,
 } = require("rxjs/operators");
 
 const L = require("../log.js");

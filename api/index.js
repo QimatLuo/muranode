@@ -2,7 +2,7 @@ global.AbortController = require("abort-controller");
 global.fetch = require("node-fetch");
 const { get, merge } = require("lodash");
 const { fromFetch } = require("rxjs/fetch");
-const { defer, from } = require("rxjs");
+const { defer } = require("rxjs");
 const { map, switchMap, tap } = require("rxjs/operators");
 
 const L = require("../cli/log.js");
