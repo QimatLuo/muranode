@@ -2,13 +2,10 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-const { differenceBy } = require("lodash");
 const {
   EMPTY,
   bindNodeCallback,
   from,
-  fromEvent,
-  merge,
   zip,
 } = require("rxjs");
 const {
@@ -17,7 +14,6 @@ const {
   map,
   mergeMap,
   pluck,
-  reduce,
   switchMap,
   shareReplay,
 } = require("rxjs/operators");

@@ -7,7 +7,6 @@ const {
   EMPTY,
   bindNodeCallback,
   from,
-  fromEvent,
   merge,
   zip,
 } = require("rxjs");
@@ -17,7 +16,6 @@ const {
   map,
   mergeMap,
   pluck,
-  reduce,
   switchMap,
   shareReplay,
   toArray,
