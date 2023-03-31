@@ -51,7 +51,7 @@ const Biz = (init = {}) => {
           }
         }),
         map((x) => {
-          if (x.statusCode >= 400) {
+          if (x.error || x.statusCode >= 400) {
             throw x;
           } else {
             return x;
