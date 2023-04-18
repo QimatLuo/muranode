@@ -75,10 +75,9 @@ const Biz = (init = {}) => {
               get: (__, k) => _[k],
             }
           );
-        case "refreshToken":
+        case "refreshtoken":
           return (x) =>
             _.api({
-              body,
               method: "GET",
               url: `${prefix}token/${x}`,
             });
