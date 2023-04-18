@@ -1,5 +1,6 @@
 global.AbortController = require("abort-controller");
 global.fetch = require("node-fetch");
+const { randomUUID } = require("crypto");
 const { get, merge } = require("lodash");
 const { fromFetch } = require("rxjs/fetch");
 const { defer } = require("rxjs");
@@ -38,11 +39,12 @@ const Biz = (init = {}) => {
         options.body = JSON.stringify(options.body);
       }
 
-      L.log(options);
+      const trackId = randomUUID();
+      L.log(trackId, options);
       return fromFetch(x.url, options).pipe(
-        tap((x) => L.log(x.status)),
+        tap((x) => L.log(trackId, x.status)),
         switchMap((x) => x.text()),
-        tap((x) => L.log(x)),
+        tap((x) => L.log(trackId, x)),
         map((x) => {
           try {
             return JSON.parse(x);

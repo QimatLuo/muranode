@@ -15,7 +15,7 @@ module.exports = {
       }
       return x;
     });
-    stringifyLog(console.log)(...xs);
+    stringifyLog(console.log)("[muranode]", ...xs);
   },
   stderr: stringifyLog(console.error),
   stdout: stringifyLog(console.log),
